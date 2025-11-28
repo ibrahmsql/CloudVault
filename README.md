@@ -1,370 +1,347 @@
-<div align="center">
-  <img src="assets/logo.svg" alt="CloudVault Logo" width="200" height="200">
-  
-# CloudVault - AWS S3 Bucket Scanner & Cloud Security Tool
+# CloudVault - Multi-Cloud Storage Security Scanner
 
-**🔍 Find exposed AWS S3 buckets, Google Cloud Storage & Azure Blob containers with advanced vulnerability detection**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![GitHub Actions](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF)](https://github.com/features/actions)
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://python.org)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE) 
-[![Security Scanner](https://img.shields.io/badge/security-scanner-red)](https://github.com/ibrahmsql/CloudVault)
-[![S3 Bucket Scanner](https://img.shields.io/badge/S3-bucket%20scanner-orange)](https://github.com/ibrahmsql/CloudVault)
-[![Cloud Security](https://img.shields.io/badge/cloud-security%20tool-purple)](https://github.com/ibrahmsql/CloudVault)
+> **Enterprise-grade cloud storage security scanner with advanced attack chain analysis, MITRE ATT&CK mapping, and comprehensive reporting**
 
-</div>
+CloudVault discovers exposed AWS S3, Google Cloud Storage, and Azure Blob containers through certificate transparency monitoring and provides actionable security insights with tree-formatted visualizations.
 
----
+## 🚀 Features
 
-## 🎯 AWS S3 Bucket Scanner | Cloud Security Scanner | Bucket Enumeration Tool
+### Core Capabilities
+- 🔍 **Real-time Discovery** - Certificate transparency log monitoring
+- ☁️ **Multi-Provider** - AWS S3, GCP Storage, Azure Blob
+- 🎯 **Smart Detection** - Automated permission checking
+- 📊 **Risk Scoring** - Advanced multi-factor algorithm (0-100)
+- 🔗 **Attack Chains** - Multi-hop privilege escalation paths
+- 🎨 **Tree Visualizations** - Beautiful ASCII output everywhere
 
-**CloudVault** is a powerful **AWS S3 bucket scanner**, **Google Cloud Storage enumeration tool**, and **Azure Blob vulnerability scanner**. Discover exposed cloud storage buckets, detect security misconfigurations, and identify vulnerabilities across AWS S3, GCP Storage, and Azure Blob containers through real-time certificate transparency monitoring.
+### Advanced Features (Beyond Heimdall)
+- 🔔 **Alerts** - Slack, Discord, Email notifications
+- 🔍 **Advanced Filtering** - Boolean logic + regex queries
+- 📈 **Historical Tracking** - SQLite database with trend sparklines
+- 🔧 **Auto-Remediation** - Terraform/AWS CLI script generation
+- 🌐 **Trust Graphs** - Relationship visualization
+- 📋 **Compliance** - CIS Benchmarks, PCI-DSS mapping
+- 🎨 **Interactive TUI** - Textual framework interface
+- 📤 **Multi-Format Export** - SARIF, CSV, JSON, HTML, ASCII Tree
 
-
-
-## 🚀 Why Choose CloudVault?
-
-> **The AWS S3 Bucket Scanner for Cloud Security Professionals**
-
-CloudVault is the most comprehensive **cloud storage security scanner** available, designed for penetration testers, bug bounty hunters, and security researchers. Our tool monitors certificate transparency logs in real-time to discover publicly accessible cloud storage buckets across **AWS S3**, **Google Cloud Storage**, and **Azure Blob Storage**.
-
-### 🎯 Perfect For:
-- **Bug Bounty Hunters** - Find exposed S3 buckets and cloud storage misconfigurations
-- **Penetration Testers** - Comprehensive cloud security assessment toolkit  
-- **Security Researchers** - Advanced OSINT and reconnaissance capabilities
-- **DevSecOps Teams** - Continuous cloud security monitoring
-- **Cybersecurity Professionals** - Enterprise-grade vulnerability scanning
-
-## ✨ Core Features - S3 Bucket Scanner & Cloud Security Tools
-
-### 🌐 AWS S3 & Multi-Cloud Bucket Discovery
-- **AWS S3 Bucket Scanner** - Find exposed S3 buckets with authenticated & unauthenticated access
-- **Google Cloud Storage Scanner** - Comprehensive GCS bucket enumeration and vulnerability detection
-- **Azure Blob Storage Scanner** - Advanced container discovery with account enumeration
-- **Multi-Cloud Support** - Simultaneous scanning across all major cloud providers
-
-### 🔄 Real-time Certificate Transparency Monitoring
-- **Live CT Log Monitoring** - Real-time domain discovery for immediate bucket scanning
-- **WebSocket Integration** - Async connections with automatic reconnection capabilities
-- **Domain Intelligence** - Advanced domain extraction and bucket name permutation
-- **Zero-Day Discovery** - Find newly registered domains and their associated buckets
-
-### 🧠 Intelligent S3 Bucket Enumeration
-- **Smart Permutation Engine** - Advanced bucket name generation with provider-specific rules
-- **Keyword-Based Detection** - Identify sensitive content and interesting files automatically
-- **Rate Limit Evasion** - Built-in quota management and intelligent throttling
-- **Custom Wordlists** - Support for custom dictionary-based bucket enumeration
-
-### 📋 Enterprise Security Reporting
-- **Detailed Vulnerability Reports** - Comprehensive security assessment documentation
-- **Multi-Format Output** - JSON, CSV, and structured logging capabilities
-- **Slack Integration** - Real-time notifications for critical findings
-- **Executive Dashboards** - High-level security metrics and progress tracking
-
-## 🚀 Quick Start - Install AWS S3 Bucket Scanner
-
-### 📦 Installation Options
+## 📦 Installation
 
 ```bash
-# Install CloudVault - Complete S3 Bucket Scanner
-pip install cloudvault4
+# Clone repository
+git clone https://github.com/yourusername/CloudVault.git
+cd CloudVault
 
-# Full installation with all cloud providers (AWS S3, GCP, Azure)
-pip install cloudvault4[all]
+# Install dependencies
+pip install -e .
 
-# Provider-specific installations for targeted scanning
-pip install cloudvault4[aws]      # AWS S3 bucket scanner only
-pip install cloudvault4[gcp]      # Google Cloud Storage scanner only  
-pip install cloudvault4[azure]    # Azure Blob Storage scanner only
-
-# Security researcher edition with all exploitation features
-pip install cloudvault4[full]
+# Install optional dependencies
+pip install aiosqlite websockets  # For history & real-time scanning
 ```
 
-### 🎧 Basic S3 Bucket Scanning Usage
+## 🎯 Quick Start
+
+### Basic Scan (Static Domain List)
 
 ```bash
-# Initialize CloudVault configuration
-cloudvault --init-config
+# Create domain list
+echo "example.com" > domains.txt
+echo "company.com" >> domains.txt
 
-# Start real-time S3 bucket discovery via certificate transparency
-cloudvault
-
-# Scan specific domains for S3 buckets and cloud storage
-cloudvault --source target-domains.txt
-
-# AWS S3 bucket scanner mode only
-cloudvault --aws-only
-
-# Find only interesting/sensitive buckets
-cloudvault --only-interesting
-
-# Advanced S3 vulnerability scanning
-cloudvault --scan-vulnerabilities --download-content
+# Scan
+cloudvault scan --source domains.txt --output findings.json
 ```
 
-### 🔍 Advanced Cloud Security Scanning
+### Real-Time Monitoring (Certificate Transparency)
 
 ```bash
-# Stealth mode S3 bucket scanning (avoid detection)
-cloudvault --stealth --proxy-rotation --anti-forensics
+# Monitor CT logs
+cloudvault scan --only-interesting --save-history
 
-# Comprehensive security assessment
-cloudvault --metadata-extraction --stego-detection --subdomain-takeover
+# With keywords filter
+cloudvault scan --keywords-file keywords.txt
 
-# Database credential testing with custom wordlist
-cloudvault --database-testing --db-wordlist passwords.txt
-
-# Network pivoting and lateral movement
-cloudvault --network-pivoting --credential-harvesting
+# With alerts
+cloudvault scan \
+  --notify slack \
+  --slack-webhook https://hooks.slack.com/... \
+  --alert-on critical,high
 ```
 
-## ⚙️ Configuration
-
-The tool uses a YAML configuration file (`config.yaml`) for all settings:
-
-```yaml
-# General Settings
-queue_size: 1000
-update_interval: 30
-log_level: INFO
-
-# AWS S3 Configuration
-aws:
-  enabled: true
-  access_key: 'YOUR_ACCESS_KEY'
-  secret_key: 'YOUR_SECRET_KEY'
-  region: us-east-1
-  max_threads: 20
-
-# Google Cloud Storage Configuration
-gcp:
-  enabled: true
-  service_account_path: '/path/to/service-account.json'
-  project_id: 'your-project-id'
-  max_threads: 15
-
-# Azure Blob Storage Configuration
-azure:
-  enabled: true
-  account_name: 'your-storage-account'
-  account_key: 'YOUR_ACCOUNT_KEY'
-  max_threads: 15
-```
-
-### Environment Variables
-
-You can also use environment variables instead of storing credentials in the config:
+### Dashboard & Analysis
 
 ```bash
-# AWS
-export AWS_ACCESS_KEY_ID="your_access_key"
-export AWS_SECRET_ACCESS_KEY="your_secret_key"
+# Security dashboard
+cloudvault dashboard -i findings.json
 
-# Google Cloud
-export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account.json"
-export GOOGLE_CLOUD_PROJECT="your-project-id"
+# With filters
+cloudvault dashboard -i findings.json \
+  --filter "severity=CRITICAL,HIGH" \
+  --only-public \
+  --min-risk-score 75
 
-# Azure
-export AZURE_STORAGE_ACCOUNT="your_account_name"
-export AZURE_STORAGE_KEY="your_account_key"
+# Attack chain analysis
+cloudvault analyze -i findings.json -f tree
+
+# Filter before analysis
+cloudvault analyze -i findings.json \
+  --filter "provider=aws" \
+  --min-blast-radius 70
 ```
 
-## 📋 Command Line Options
+### Export & Reporting
 
-```
-cloudvault [OPTIONS]
+```bash
+# SARIF for GitHub Security
+cloudvault export -i findings.json -f sarif -o report.sarif
 
-Configuration:
-  -c, --config FILE         Configuration file path (default: config.yaml)
-  --init-config            Create a default configuration file
+# HTML report
+cloudvault export -i findings.json -f html -o report.html
 
-Input:
-  -s, --source FILE        Process static domain list instead of live stream
-  -p, --permutations FILE  Custom permutation patterns file
-  --keywords-file FILE     Keywords for interesting content detection
+# Tree visualization
+cloudvault export -i findings.json -f tree -o report.txt
 
-Workers:
-  -t, --threads N          Override number of worker threads per provider
-
-Filtering:
-  --only-interesting       Only report buckets with interesting content
-  --skip-lets-encrypt      Skip Let's Encrypt certificates
-
-Output:
-  -l, --log-to-file        Log found buckets to file
-  -v, --verbose            Enable verbose logging
-
-Providers:
-  --aws-only              Only check AWS S3 buckets
-  --gcp-only              Only check Google Cloud Storage buckets
-  --azure-only            Only check Azure Blob Storage containers
-
-Advanced Features:
-  --stealth               Enable stealth mode with evasion techniques
-  --scan-vulnerabilities  Perform vulnerability scanning on discovered buckets
-  --download-content      Download and analyze bucket contents
-  --dns-enum             Enable DNS-based bucket enumeration
-  --db-wordlist FILE     Use wordlist for database credential testing
-  
-Stealth Options:
-  --proxy-rotation        Enable proxy rotation for anonymity
-  --traffic-shaping TYPE  Shape traffic (mobile/residential/datacenter)
-  --geo-country CODE      Simulate traffic from specific country
-  --anti-forensics       Enable anti-forensics and evidence cleanup
-  --process-masking      Hide process from monitoring tools
-
-Security Analysis:
-  --metadata-extraction   Extract metadata from discovered files
-  --stego-detection      Scan for steganography in images and files
-  --subdomain-takeover   Check for subdomain takeover vulnerabilities
-  --database-testing     Test databases with default/weak credentials
-  --network-pivoting     Attempt lateral movement with found credentials
+# CSV for spreadsheets
+cloudvault export -i findings.json -f csv -o report.csv
 ```
 
-## 🎯 Example Output
+### Auto-Remediation
 
+```bash
+# Generate Terraform
+cloudvault remediate -i findings.json -f terraform --dry-run
+
+# Generate AWS CLI commands
+cloudvault remediate -i findings.json -f awscli
 ```
-Starting CloudVault .0
-Providers: aws, gcp, azure | Workers: 50 | Patterns: 127
 
-Connected to certificate transparency stream!
+### Compliance Audit
 
-Found AWS bucket: https://company-backup.s3.amazonaws.com [PUBLIC_READ] (Owner: company-admin) - 3 interesting files!
-Found GCP bucket: https://storage.googleapis.com/company-logs [PUBLIC_READ]
-Found AZURE container: https://companydata.blob.core.windows.net/backups [PRIVATE]
+```bash
+# CIS Benchmarks
+cloudvault compliance -i findings.json --framework CIS
 
-Status: 1,247 checked (42.3/s), 3 found, 2 public, 1 interesting
-  aws: 856 checked, 2 found, 1 public
-  gcp: 234 checked, 1 found, 1 public
-  azure: 157 checked, 0 found, 0 public
+# PCI-DSS
+cloudvault compliance -i findings.json --framework PCI-DSS
 ```
+
+### History & Trends
+
+```bash
+# View scan history
+cloudvault history list --limit 20
+
+# Trend analysis with sparklines
+cloudvault history trends --days 30
+
+# Compare scans
+cloudvault history compare --from-scan 1 --to-scan 5
+```
+
+## 📋 Commands Reference
+
+| Command | Description |
+|---------|-------------|
+| `scan` | Discover exposed buckets (CT logs or domain list) |
+| `dashboard` | Security overview with risk scoring |
+| `analyze` | Attack chain and privilege escalation analysis |
+| `export` | Multi-format export (SARIF/CSV/JSON/HTML/Tree) |
+| `remediate` | Generate auto-fix scripts (Terraform/AWS CLI) |
+| `compliance` | Framework mapping (CIS/PCI-DSS/HIPAA) |
+| `history` | Scan history, trends, and comparison |
+| `graph` | Trust relationship visualization |
+| `tui` | Interactive terminal UI |
+| `baseline` | Delta reporting and ignore patterns |
+| `test-alerts` | Test notification channels |
+| `init-config` | Create default configuration |
 
 ## 🔧 Advanced Usage
 
-### Custom Permutation Patterns
+### Filtering Syntax
 
-Create custom bucket name patterns in `permutations/custom.txt`:
+```bash
+# Equality
+--filter "severity=CRITICAL"
 
-```
-{domain}-backup
-{domain}-data
-{domain}-storage
-backup-{domain}
-data-{domain}
-{domain}001
-{domain}prod
-```
+# Multiple values (OR)
+--filter "severity=CRITICAL,HIGH"
 
-### Keywords for Interesting Content
+# Comparison operators
+--filter "risk_score>=75"
 
-Define keywords in `keywords.txt` to identify sensitive files:
+# Regex
+--filter "bucket_name~regex:.*-prod-.*"
 
-```
-password
-config
-secret
-backup
-.sql
-.env
-credentials
-private
+# Boolean AND
+--filter "severity=CRITICAL AND provider=aws"
+
+# Exclude
+--exclude "bucket_name~.*-test-.*"
+
+# Combine filters
+--filter "severity=CRITICAL,HIGH" \
+--only-public \
+--min-risk-score 80
 ```
 
-### Slack Integration
+### Alert Configuration
 
-Add your Slack webhook URL to the configuration for real-time notifications:
+```bash
+# Slack
+--notify slack \
+--slack-webhook https://hooks.slack.com/... \
+--alert-on critical,high
+
+# Discord
+--notify discord \
+--discord-webhook https://discord.com/api/webhooks/...
+
+# Email (SMTP)
+--notify email \
+--email-to security@company.com \
+--smtp-host smtp.gmail.com \
+--smtp-user alerts@company.com \
+--smtp-password "..."
+
+# Multiple channels
+--notify slack discord email
+```
+
+### CI/CD Integration
 
 ```yaml
-slack_webhook: 'https://hooks.slack.com/services/YOUR/WEBHOOK/URL'
+# .github/workflows/cloudvault.yml
+- name: Run CloudVault
+  run: |
+    cloudvault scan --source domains.txt --output findings.json
+    cloudvault export -i findings.json -f sarif -o cloudvault.sarif
+
+- name: Upload SARIF
+  uses: github/codeql-action/upload-sarif@v2
+  with:
+    sarif_file: cloudvault.sarif
+```
+
+## 📊 Output Examples
+
+### Dashboard
+```
+╔═══════════════════════════════════════════════════════════╗
+║                  CloudVault Dashboard                     ║
+║              Cloud Security Risk Analysis                 ║
+╚═══════════════════════════════════════════════════════════╝
+
+╔════ Security Risk Score ═════╗
+║ Risk Score: 64.0/100         ║
+║ Status: HIGH                 ║
+╚══════════════════════════════╝
+
+      Findings by Severity      
+  CRITICAL: 2 (40.0%)  ████████
+  HIGH:     2 (40.0%)  ████████
+  MEDIUM:   1 (20.0%)  ████
+
+Top Security Risks:
+  1. Public S3 Bucket with Sensitive Data
+  2. Credentials in Bucket Objects
+  3. Database Dump Exposure
+```
+
+### Attack Chain Analysis
+```
+Multi-Hop Privilege Escalation (Blast Radius: 90.0)
+├── Access Public Bucket (T1530)
+├── Extract Credentials (T1552.001)
+├── Authenticate with Stolen Credentials (T1078)
+└── Exfiltrate Sensitive Data (T1537)
+```
+
+### Compliance Report
+```
+📋 CIS Compliance Report
+============================================================
+
+├─ Total Controls: 2
+├─ ✓ Passed: 0
+└─ ✗ Failed: 4
+
+├─ CIS-2.1.5: Ensure S3 buckets are not publicly accessible
+   └─ ✗ company-prod-backups
 ```
 
 ## 🏗️ Architecture
 
-CloudVault follows a modern, modular architecture:
-
 ```
 cloudvault_discovery/
-├── core/                 # Core functionality
-│   ├── config.py        # Configuration management
-│   ├── cert_stream.py   # Certificate transparency monitoring
-│   ├── queue_manager.py # Thread-safe queue management
-│   ├── worker.py        # Base worker classes
-│   └── permutations.py  # Bucket name generation
-├── providers/           # Cloud provider implementations
-│   ├── aws_s3.py       # AWS S3 support
-│   ├── gcp_storage.py  # Google Cloud Storage support
-│   └── azure_blob.py   # Azure Blob Storage support
-└── cli.py              # Command-line interface
+├── cli/              # Click command-line interface
+├── core/             # Scanning engine (certstream, scanner)
+├── models/           # Data models (Finding, AttackChain)
+├── analysis/         # Risk scoring, MITRE mapping, attack chains
+├── dashboard/        #Rich visualization and metrics
+├── export/           # Multi-format exporters
+├── alerts/           # Notification channels
+├── filtering/        # Advanced query parser
+├── history/          # SQLite database & trends
+├── remediation/      # Auto-fix templates
+├── compliance/       # Framework mappers
+├── graph/            # Trust visualization
+└── tui/              # Textual UI
 ```
 
-### Key Components
+## 🧪 Testing
 
-- **Certificate Stream Monitor**: Async WebSocket client for real-time CT log monitoring
-- **Queue Manager**: Thread-safe, provider-specific queues with rate limiting
-- **Provider Workers**: Modular cloud storage implementations with authentication
-- **Permutation Generator**: Smart bucket name generation from domains
-- **Result Handler**: Unified output formatting and logging
+```bash
+# Run tests
+pytest tests/ -v
 
-## 🛡️ Security Considerations
+# With coverage
+pytest tests/ --cov=cloudvault_discovery
+```
 
-### Responsible Disclosure
-This tool is designed for security research and authorized testing only. Always ensure you have permission before testing against any infrastructure.
+## 📝 Configuration
 
-### Rate Limiting
-- Built-in rate limiting for all cloud providers
-- Exponential backoff for rate limit responses
-- Configurable request delays and timeouts
+```yaml
+# config.yaml
+scan:
+  providers:
+    aws: true
+    gcp: true
+    azure: true
+  skip_lets_encrypt: true
+  
+alerts:
+  slack_webhook: "https://hooks.slack.com/..."
+  severity_filter: ["CRITICAL", "HIGH"]
 
-### Authentication
-- Supports both authenticated and unauthenticated modes
-- Higher thread limits and better access control detection when authenticated
-- Secure credential handling via environment variables
+filters:
+  exclude_patterns:
+    - "*-test-*"
+    - "*-dev-*"
+```
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
 
-### Development Setup
+## 📄 License
 
-```bash
-# Clone the repository
-git clone https://github.com/ibrahmsql/CloudVault.git
-cd cloudvault
-
-# Install in development mode with all dependencies
-pip install -e .[dev,all]
-
-# Run tests
-pytest
-
-# Format code
-black cloudvault_discovery/
-
-# Type checking
-mypy cloudvault_discovery/
-```
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) for details.
 
 ## 🙏 Acknowledgments
 
-- Certificate Transparency community for their excellent work
-- Cloud security research community
-- Open source security tools ecosystem
+- Inspired by [Heimdall](https://github.com/DenizParlak/heimdall)
+- Certificate transparency via [Certstream](https://certstream.calidog.io/)
+- MITRE ATT&CK Framework
 
-## ⚠️ Disclaimer
+## 📞 Support
 
-This tool is for educational and authorized security research purposes only. Users are responsible for complying with applicable laws and regulations. The authors are not responsible for any misuse or damage caused by this tool.
+- 🐛 [Report bugs](https://github.com/yourusername/CloudVault/issues)
+- 💡 [Request features](https://github.com/yourusername/CloudVault/issues)
+- 📖 [Documentation](https://cloudvault.readthedocs.io/)
 
+---
 
-<div align="center">
-
-**⭐ Star this repository if CloudVault helped you find S3 buckets!**
-
-[![GitHub stars](https://img.shields.io/github/stars/ibrahmsql/CloudVault?style=social)](https://github.com/ibrahmsql/CloudVault)
-
-**Made with ❤️ by ibrahimsql**
-
-</div>
+**Made with ❤️ for cloud security**

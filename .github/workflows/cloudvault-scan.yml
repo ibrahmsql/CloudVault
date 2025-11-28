@@ -1,0 +1,113 @@
+name: CloudVault Security Scan
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      severity_threshold:
+        description: 'Fail on severity (critical,high,medium)'
+        required: false
+        default: 'critical,high'
+
+jobs:
+  cloudvault-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      
+      - name: Install CloudVault
+        run: |
+          pip install -e .
+          pip install aiosqlite  # For history tracking
+      
+      - name: Run CloudVault Scan 
+        id: scan
+        run: |
+          # Create domains file from repo
+          echo "example.com" > domains.txt
+          echo "test.com" >> domains.txt
+          
+          # Run scan
+          cloudvault scan \
+            --source domains.txt \
+            --output findings.json \
+            --save-history \
+            --only-interesting
+        continue-on-error: true
+      
+      - name: Generate Dashboard
+        if: always()
+        run: |
+          cloudvault dashboard \
+            -i findings.json \
+            --filter "severity=${{ github.event.inputs.severity_threshold || 'critical,high' }}"
+      
+      - name: Export SARIF
+        if: always()
+        run: |
+          cloudvault export \
+            -i findings.json \
+            -f sarif \
+            -o cloudvault.sarif
+      
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: cloudvault.sarif
+          category: cloudvault-security
+      
+      - name: Generate Compliance Report
+        if: always()
+        run: |
+          cloudvault compliance \
+            -i findings.json \
+            --framework CIS \
+            > compliance-report.txt
+      
+      - name: Upload Artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cloudvault-scan-results
+          path: |
+            findings.json
+            cloudvault.sarif
+            compliance-report.txt
+      
+      - name: Check for Critical/High Findings
+        if: always()
+        run: |
+          # Fail if critical or high findings
+          CRITICAL=$(cloudvault dashboard -i findings.json --filter "severity=CRITICAL" 2>&1 | grep -c "CRITICAL" || echo "0")
+          HIGH=$(cloudvault dashboard -i findings.json --filter "severity=HIGH" 2>&1 | grep -c "HIGH" || echo "0")
+          
+          if [ "$CRITICAL" -gt "0" ] || [ "$HIGH" -gt "0" ]; then
+            echo "❌ Found $CRITICAL critical and $HIGH high severity findings"
+            exit 1
+          else
+            echo "✅ No critical or high severity findings"
+          fi
+      
+      - name: Send Slack Notification
+        if: ${{ failure() && github.event_name != 'pull_request' && env.SLACK_WEBHOOK != '' }}
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          cloudvault test-alerts \
+            --notify slack \
+            --slack-webhook "$SLACK_WEBHOOK" \
+            --alert-on critical,high

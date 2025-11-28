@@ -1,0 +1,25 @@
+created_at: '2025-11-27T18:31:29.605183Z'
+findings:
+- bucket_name: company-prod-backups
+  id: finding-001
+  severity: CRITICAL
+  title: Public S3 Bucket with Sensitive Data
+- bucket_name: corp-uploads
+  id: finding-002
+  severity: CRITICAL
+  title: Storage Bucket with Write Permissions
+- bucket_name: database-backups
+  id: finding-003
+  severity: HIGH
+  title: Unencrypted Azure Blob with Database Dumps
+- bucket_name: dev-source-archives
+  id: finding-004
+  severity: HIGH
+  title: Exposed Source Code Repository
+- bucket_name: app-logs-2024
+  id: finding-005
+  severity: MEDIUM
+  title: Log Files with Sensitive Information
+ignore_patterns: []
+total_findings: 5
+version: '1.0'

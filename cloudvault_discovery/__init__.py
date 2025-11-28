@@ -4,16 +4,19 @@ A modern, modular Python security research tool that monitors certificate transp
 to discover publicly accessible cloud storage across multiple providers (AWS S3, Google Cloud Storage, Azure Blob Storage).
 """
 __version__ = "1.0.1"
-__author__ = "ibrahimsql"
-__description__ = "Multi-cloud storage bucket discovery via certificate transparency monitoring"
-from .core.config import Config
-from .core.cert_stream import CertStreamMonitor
-from .core.queue_manager import BucketQueue
-from .core.worker import BaseWorker, WorkerResult
+__author__ = "ibrahim"
+__description__ = """
+CloudVault - Multi-cloud storage bucket discovery via certificate transparency
+
+A powerful security scanner for discovering exposed AWS S3, Google Cloud Storage,
+and Azure Blob Storage containers through real-time certificate transparency monitoring.
+"""
+
+# Export main CLI entry point
+from .cli import main
+
 __all__ = [
-    "Config",
-    "CertStreamMonitor", 
-    "BucketQueue",
-    "BaseWorker",
-    "WorkerResult",
+    'main',
+    '__version__',
+    '__author__'
 ]

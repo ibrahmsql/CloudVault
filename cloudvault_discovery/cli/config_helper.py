@@ -1,9 +1,12 @@
 """
-Configuration helper functions for CloudVault CLI
-Handles config file creation and management
+Configuration helper functions
 """
-from termcolor import cprint
-from ..core.config import Config
+
+from pathlib import Path
+from rich.console import Console
+import yaml
+
+console = Console()
 
 
 def create_default_config():
@@ -14,11 +17,29 @@ def create_default_config():
         bool: True if successful, False otherwise
     """
     config_path = "config.yaml"
+    
+    default_config = {
+        'scan': {
+            'providers': {
+                'aws': True,
+                'gcp': True,
+                'azure': True
+            },
+            'skip_lets_encrypt': True,
+            'only_interesting': False
+        },
+        'alerts': {
+            'enabled': False
+        }
+    }
+    
     try:
-        Config.create_default_config(config_path)
-        cprint(f"Default configuration created: {config_path}", "green")
-        cprint("Please edit the configuration file and add your cloud credentials.", "yellow")
+        with open(config_path, 'w') as f:
+            yaml.dump(default_config, f, default_flow_style=False)
+        
+        console.print(f"[green]✓[/green] Created default configuration: {config_path}")
+        console.print("[yellow]Please edit the configuration file as needed.[/yellow]")
         return True
     except Exception as e:
-        cprint(f"Error creating default config: {e}", "red")
+        console.print(f"[bold red]✗ Error:[/bold red] {e}")
         return False
