@@ -581,6 +581,39 @@ def gcp_functions(project: str, bucket: str):
         console.print(f"[bold red]✗ Error:[/bold red] {e}")
 
 
+
+
+# Import EC2 commands from separate module
+from .recon_ec2 import ec2_enum, ec2_ssrf, ec2_security
+
+# Register EC2 commands
+recon.add_command(ec2_enum)
+recon.add_command(ec2_ssrf)
+recon.add_command(ec2_security)
+
+# Import new AWS and Security commands
+from .recon_aws import (
+    iam_enum, lambda_enum, rds_enum, 
+    s3_analyzer, eks_enum, secrets_scan,
+    compliance as compliance_check, attack_chain,
+    cloudtrail, aws_secrets, azure_keyvault, gcp_secrets
+)
+
+# Register AWS commands
+recon.add_command(iam_enum, name='iam-enum')
+recon.add_command(lambda_enum, name='lambda-enum')
+recon.add_command(rds_enum, name='rds-enum')
+recon.add_command(s3_analyzer, name='s3-deep')
+recon.add_command(eks_enum, name='eks-enum')
+recon.add_command(secrets_scan, name='secrets-scan')
+recon.add_command(compliance_check, name='compliance-check')
+recon.add_command(attack_chain, name='attack-chain')
+recon.add_command(cloudtrail, name='cloudtrail')
+recon.add_command(aws_secrets, name='aws-secrets')
+recon.add_command(azure_keyvault, name='azure-keyvault')
+recon.add_command(gcp_secrets, name='gcp-secrets')
+
+
 @recon.command('scan-config')
 @click.option('--rate-limit', type=float, default=10.0,
               help='Requests per second')
@@ -610,3 +643,4 @@ def scan_config(rate_limit: float, stealth: bool, timeout: int):
 
 
 __all__ = ['recon']
+
